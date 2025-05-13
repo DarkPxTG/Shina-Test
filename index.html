@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <title>Shina Assistant</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: sans-serif;
+      background-color: #121827;
+      color: white;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    header h1 {
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    header p {
+      font-size: 14px;
+      color: #aaa;
+    }
+
+    .time {
+      font-size: 32px;
+      margin-top: 10px;
+    }
+
+    .robot-img {
+      width: 200px;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    .bottom-nav {
+      position: relative;
+      width: 100%;
+      height: 100px;
+      background: #0f172a;
+      border-top-left-radius: 50% 40px;
+      border-top-right-radius: 50% 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      overflow: visible;
+    }
+
+    .main-button {
+      position: absolute;
+      top: -35px;
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #00f, #00f5, #0ff);
+      box-shadow: 0 0 25px #0ff;
+      border: 4px solid #121827;
+      z-index: 2;
+      animation: glowRotate 3s linear infinite;
+    }
+
+    @keyframes glowRotate {
+      0% {
+        box-shadow: 0 0 10px #0ff, 0 0 20px #0ff, 0 0 30px #00f, 0 0 40px #0ff;
+        transform: rotate(0deg);
+      }
+      50% {
+        box-shadow: 0 0 20px #00f, 0 0 30px #0ff, 0 0 40px #0ff, 0 0 60px #00f;
+      }
+      100% {
+        box-shadow: 0 0 10px #0ff, 0 0 20px #0ff, 0 0 30px #00f, 0 0 40px #0ff;
+        transform: rotate(360deg);
+      }
+    }
+
+    .nav-icon {
+      width: 28px;
+      opacity: 1;
+      filter: brightness(0) saturate(100%) invert(21%) sepia(96%) saturate(6960%) hue-rotate(180deg) brightness(91%) contrast(105%);
+    }
+
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Shina Assistant</h1>
+    <p>Powered By Holoroid</p>
+    <div class="time" id="time">--:--</div>
+  </header>
+
+  <img src="https://s6.uupload.ir/files/inshot_۲۰۲۵۰۵۱۳_۱۳۲۳۳۵۸۷۱_3yix.png" alt="Robot" class="robot-img">
+
+  <div class="bottom-nav">
+    <div class="side-icon">
+      <img src="https://img.icons8.com/ios-filled/50/settings.png" class="nav-icon">
+    </div>
+    
+    <div class="main-button"></div>
+
+    <div class="side-icon">
+      <img src="https://img.icons8.com/ios-filled/50/user.png" class="nav-icon">
+    </div>
+  </div>
+
+  <script>
+    function updateTime() {
+      const now = new Date();
+      const hour = now.getHours().toString().padStart(2, '0');
+      const minute = now.getMinutes().toString().padStart(2, '0');
+      const timeText = `${hour}:${minute}`;
+      document.getElementById('time').textContent = timeText;
+
+      speak(timeText); // خواندن زمان به صدا
+    }
+
+    // تابع تبدیل متن به صدا
+    function speak(text) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'fa-IR'; // تنظیم زبان فارسی
+      utterance.pitch = 1;
+      utterance.rate = 1;
+      speechSynthesis.speak(utterance); // پخش صدا
+    }
+
+    // شناسایی صدا از کاربر
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.lang = 'fa-IR'; // تنظیم زبان فارسی
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = function() {
+      console.log('Voice recognition started');
+    };
+
+    recognition.onspeechend = function() {
+      console.log('Speech recognition ended');
+    };
+
+    recognition.onresult = function(event) {
+      const transcript = event.results[0][0].transcript;
+      console.log('You said: ' + transcript);
+
+      // جواب دادن به درخواست‌ها
+      if (transcript.includes('سلام')) {
+        speak('سلام، چطور می‌توانم کمک کنم؟');
+      } else if (transcript.includes('چطوری؟')) {
+        speak('من خوبم، متشکرم که پرسیدید!');
+      } else {
+        speak('ببخشید، نتواستم شما را متوجه شوم.');
+      }
+    };
+
+    // شروع شناسایی صدا
+    function startListening() {
+      recognition.start();
+    }
+
+    // صدا زدن از میکروفن
+    startListening();
+
+    setInterval(updateTime, 1000);
+    updateTime();
+  </script>
+
+</body>
+</html>

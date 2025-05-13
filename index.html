@@ -2,8 +2,8 @@
 <html lang="fa">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Shina Assistant</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     * {
       margin: 0;
@@ -20,40 +20,38 @@
       flex-direction: column;
       justify-content: space-between;
       align-items: center;
+      padding: 10px;
     }
 
     header {
       text-align: center;
-      margin-top: 30px;
+      margin-top: 10px;
     }
 
     header h1 {
-      font-size: 24px;
-      font-weight: bold;
+      font-size: 22px;
     }
 
     header p {
-      font-size: 14px;
+      font-size: 12px;
       color: #aaa;
     }
 
     .time {
-      font-size: 32px;
-      margin-top: 10px;
+      font-size: 22px;
+      margin-top: 8px;
     }
 
     .robot-img {
-      width: 120px;
+      width: 250px;
+      max-width: 80%;
       animation: float 3s ease-in-out infinite;
+      margin: 10px 0;
     }
 
     @keyframes float {
-      0%, 100% {
-        transform: translateY(0px);
-      }
-      50% {
-        transform: translateY(-10px);
-      }
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
     }
 
     .bottom-nav {
@@ -61,19 +59,18 @@
       width: 100%;
       height: 80px;
       background: #0f172a;
-      border-top-left-radius: 50% 40px;
-      border-top-right-radius: 50% 40px;
+      border-top-left-radius: 50% 30px;
+      border-top-right-radius: 50% 30px;
       display: flex;
       align-items: center;
       justify-content: space-around;
-      overflow: visible;
     }
 
     .main-button {
       position: absolute;
-      top: -35px;
-      width: 70px;
-      height: 70px;
+      top: -30px;
+      width: 80px;
+      height: 80px;
       border-radius: 50%;
       background: radial-gradient(circle at 30% 30%, #00f, #00f5, #0ff);
       box-shadow: 0 0 25px #0ff;
@@ -83,25 +80,14 @@
     }
 
     @keyframes glowRotate {
-      0% {
-        box-shadow: 0 0 10px #0ff, 0 0 20px #0ff, 0 0 30px #00f, 0 0 40px #0ff;
-        transform: rotate(0deg);
-      }
-      50% {
-        box-shadow: 0 0 20px #00f, 0 0 30px #0ff, 0 0 40px #0ff, 0 0 60px #00f;
-      }
-      100% {
-        box-shadow: 0 0 10px #0ff, 0 0 20px #0ff, 0 0 30px #00f, 0 0 40px #0ff;
-        transform: rotate(360deg);
-      }
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
 
     .nav-icon {
-      width: 28px;
-      opacity: 1;
+      width: 24px;
       filter: brightness(0) saturate(100%) invert(21%) sepia(96%) saturate(6960%) hue-rotate(180deg) brightness(91%) contrast(105%);
     }
-
   </style>
 </head>
 <body>
@@ -114,11 +100,12 @@
 
   <img src="https://s6.uupload.ir/files/inshot_۲۰۲۵۰۵۱۳_۱۳۲۳۳۵۸۷۱_3yix.png" alt="Robot" class="robot-img">
 
+  <!-- نوار پایین هلالی -->
   <div class="bottom-nav">
     <div class="side-icon">
       <img src="https://img.icons8.com/ios-filled/50/settings.png" class="nav-icon">
     </div>
-    
+
     <div class="main-button"></div>
 
     <div class="side-icon">
@@ -127,72 +114,56 @@
   </div>
 
   <script>
+    // بروزرسانی ساعت
     function updateTime() {
       const now = new Date();
       const hour = now.getHours().toString().padStart(2, '0');
       const minute = now.getMinutes().toString().padStart(2, '0');
-      const timeText = `${hour}:${minute}`;
-      document.getElementById('time').textContent = timeText;
-
-      speak(timeText); // خواندن زمان به صدا
-    }
-
-    // تابع تبدیل متن به صدا
-    function speak(text) {
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'fa-IR'; // تنظیم زبان فارسی
-      utterance.pitch = 1;
-      utterance.rate = 1;
-      speechSynthesis.speak(utterance); // پخش صدا
-    }
-
-    // شناسایی صدا از کاربر
-    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-    recognition.lang = 'fa-IR'; // تنظیم زبان فارسی
-    recognition.interimResults = false;
-    recognition.maxAlternatives = 1;
-
-    recognition.onstart = function() {
-      console.log('Voice recognition started');
-    };
-
-    recognition.onspeechend = function() {
-      console.log('Speech recognition ended');
-    };
-
-    recognition.onresult = function(event) {
-      const transcript = event.results[0][0].transcript;
-      console.log('You said: ' + transcript);
-
-      // جواب دادن به درخواست‌ها
-      if (transcript.includes('سلام')) {
-        speak('سلام، چطور می‌توانم کمک کنم؟');
-      } else if (transcript.includes('چطوری؟')) {
-        speak('من خوبم، متشکرم که پرسیدید!');
-      } else {
-        speak('ببخشید، نتواستم شما را متوجه شوم.');
-      }
-    };
-
-    // شروع شناسایی صدا
-    function startListening() {
-      recognition.start();
-    }
-
-    // درخواست میکروفن
-    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-      navigator.mediaDevices.getUserMedia({ audio: true })
-        .then(function(stream) {
-          console.log('میکروفن متصل شد');
-          startListening();
-        })
-        .catch(function(error) {
-          console.error('دسترسی به میکروفن موفق نبود:', error);
-        });
+      document.getElementById('time').textContent = `${hour}:${minute}`;
     }
 
     setInterval(updateTime, 1000);
     updateTime();
+
+    // تبدیل گفتار به متن و پاسخ صوتی
+    window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if ('SpeechRecognition' in window) {
+      const recognition = new SpeechRecognition();
+      recognition.lang = 'fa-IR';
+      recognition.interimResults = false;
+      recognition.continuous = true;
+
+      recognition.onresult = function(event) {
+        const lastResult = event.results[event.results.length - 1][0].transcript.trim();
+        console.log("شما گفتید:", lastResult);
+
+        if (lastResult.includes("سلام")) {
+          speak("سلام! چطور کمکت کنم؟");
+        } else if (lastResult.includes("چند ساعت است") || lastResult.includes("ساعت")) {
+          const now = new Date();
+          speak(`الان ساعت ${now.getHours()} و ${now.getMinutes()} دقیقه است`);
+        } else {
+          speak("متوجه نشدم، لطفا دوباره بپرس");
+        }
+      };
+
+      recognition.onerror = function(event) {
+        console.log("خطا در تشخیص صدا:", event.error);
+      };
+
+      recognition.start();
+    } else {
+      alert("مرورگر شما از تشخیص صدا پشتیبانی نمی‌کند.");
+    }
+
+    // تابع پاسخ صوتی
+    function speak(text) {
+      const synth = window.speechSynthesis;
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = 'fa-IR';
+      synth.speak(utter);
+    }
   </script>
 
 </body>

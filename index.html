@@ -60,31 +60,33 @@
     }
 
     .bottom-nav {
-      position: relative;
-      width: 100%;
-      height: 90px;
-      background: #0f172a;
-      border-top-left-radius: 50% 40px;
-      border-top-right-radius: 50% 40px;
-      display: flex;
-      align-items: center;
-      justify-content: space-around;
-      overflow: visible;
-      margin-bottom: 10px;
-    }
+    position: relative;
+    width: 100%;
+    height: 90px;
+    background: #0f172a;
+    border-top-left-radius: 50% 40px;
+    border-top-right-radius: 50% 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    overflow: visible;
+    margin-bottom: 30px; /* کمتر شد */
+  }
 
-    .main-button {
-      position: absolute;
-      top: -50px;
-      width: 75px;
-      height: 75px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 30% 30%, #00f, #00f5, #0ff);
-      box-shadow: 0 0 25px #0ff;
-      border: 4px solid #121827;
-      z-index: 2;
-      animation: glowRotate 3s linear infinite;
-    }
+     .main-button {
+    position: absolute;
+    top: -60px; /* بالاتر اومد */
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #00f, #00f5, #0ff);
+    box-shadow: 0 0 25px #0ff;
+    border: 4px solid #121827;
+    z-index: 2;
+    animation: glowRotate 3s linear infinite;
+  }
+
+  /* ... بقیه کدها مثل قبل ... */
 
     @keyframes glowRotate {
       0% {
